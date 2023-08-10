@@ -1,9 +1,10 @@
 import requests
 import json
 from requests.structures import CaseInsensitiveDict
+import credentials
 
 def main():
-    url = <redacted> 
+    url = credentials.url
 
     food = input("What food are you looking for:  ")
 
