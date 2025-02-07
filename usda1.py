@@ -3,6 +3,10 @@ import json
 from requests.structures import CaseInsensitiveDict
 import credentials
 
+''' We need to refine the search to return more useful information, more refined.
+    also needed, add error handling, return a health score by comparing the protein, carbs, calories
+    and other nutrients to rate each food on how good it is for you.  '''
+
 def main():
     food = input("What food are you looking for:  ")
     get_food_items(food)
@@ -30,7 +34,7 @@ def get_food_items(food):
         #print (item, itemcount)
         print (str(itemcount) + " " + food_fields["foods"][itemcount]["description"])
         #itemcount = itemcount+1
-        
+
     # create a try and except block
     item_choice = int(input ("Which item would you like to see: "))
     print (str(item_choice) + " " + food_fields["foods"][item_choice]["description"])
