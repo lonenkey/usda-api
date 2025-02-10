@@ -4,8 +4,10 @@ from requests.structures import CaseInsensitiveDict
 import credentials
 
 ''' We need to refine the search to return more useful information, more refined.
-    also needed, add error handling, return a health score by comparing the protein, carbs, calories
-    and other nutrients to rate each food on how good it is for you.  '''
+    Also needed, add error handling, return a health score by comparing the protein, carbs, calories
+    and other nutrients to rate each food on how good it is for you.
+    Also, generate a document with serveral different foods chosen
+    Create a database of recently saved foods.'''
 
 def main():
     food = input("What food are you looking for:  ")
