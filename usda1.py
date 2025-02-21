@@ -5,10 +5,10 @@ import credentials  # Unused import if 'credentials' is not fully utilized
 ''' We need to refine the search to return more useful information, more refined.
     Also needed, add error handling, return a health score by comparing the protein, carbs, calories
     and other nutrients to rate each food on how good it is for you.
-    Also, generate a document with serveral different foods chosen
+    Also, generate a document with several different foods chosen
     Create a database of recently saved foods.'''
 # PEP8: Use triple double quotes for docstrings (""" instead of ''')
-# PEP8: Typo in "serveral" -> should be "several"
+
 
 def main():  # PEP8: Function docstring missing
     food = input("What food are you looking for:  ")  # PEP8: Extra space after colon
