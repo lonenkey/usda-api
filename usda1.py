@@ -36,8 +36,8 @@ def get_food_items(food):  # PEP8: Function docstring missing
     with open("food_fields.txt", "w") as f:
         f.write(str(food_fields))
 
-    hits = (food_fields["totalHits"])
-    # PEP8: Unnecessary parentheses around 'food_fields["totalHits"]'
+    hits = food_fields["totalHits"]
+    # PEP8: Unnecessary parentheses around 'food_fields["totalHits"]' | Fixed
 
     if hits > 50:
         hits = 50
