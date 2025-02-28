@@ -1,33 +1,53 @@
 import requests
 import json
-import credentials  # Unused import if 'credentials' is not fully utilized
+import sys
+from requests.structures import CaseInsensitiveDict
+from pathlib import Path
 
-''' We need to refine the search to return more useful information, more refined.
+""" We need to refine the search to return more useful information, more refined.
     Also needed, add error handling, return a health score by comparing the protein, carbs, calories
     and other nutrients to rate each food on how good it is for you.
     Also, generate a document with several different foods chosen
-    Create a database of recently saved foods.'''
-# PEP8: Use triple double quotes for docstrings (""" instead of ''')
+    Create a database of recently saved foods."""
 
+def get_food_items(food):
+    """Credentials.url file is required with API url and key
+    This module will take the food item and search for it in the USDA database"""
 
-def main():  # PEP8: Function docstring missing
-    food = input("What food are you looking for:  ")  # PEP8: Extra space after colon
-    get_food_items(food)
+    credentials_file = Path("credentials.py")
 
-def get_food_items(food):  # PEP8: Function docstring missing
-    url = credentials.url  # PEP8: Ensure 'credentials.url' exists or handle missing attribute
+    if credentials_file.exists() and credentials_file.is_file():
+        import credentials
+        print ("Credentials found.")
+    else:
+        print ("Error:  Credentials not found")
+        sys.exit(1)
+    # Set up the API call
+    url = credentials.url
     headers = requests.structures.CaseInsensitiveDict()
     headers["Content-Type"] = "application/json"
 
-    data = {"query": food, "dataType": ["Branded"], "maxItems": 1, "format": "abridged"}
-    # PEP8: For complex dictionaries, break into multiple lines for readability
+    data = {"query": food,
+            "dataType": ["Branded"],
+            "maxItems": 1,
+            "format": "abridged"}
 
-    resp = requests.post(url, headers=headers, json=data)
-    # PEP8: No error handling for the API request (add try-except block)
+    # Make the API call
+    try:
+            response = requests.post(url, headers=headers, json=data)
+            response.raise_for_status()
+            food_data = json.dumps(response.json(), indent=4)
 
-    food_data = json.dumps(resp.json(), indent = 4)
-    # PEP8: Avoid spaces around the equals sign in keyword arguments (use indent=4)
+    except requests.exceptions.Timeout:
+        print("Request timed out.")
+    except requests.exceptions.ConnectionError:
+        print("Unable to connect.")
+    except requests.exceptions.HTTPError as err:
+        print(f"Http error: {err}")
+    except requests.exceptions.RequestException as err:
+        print(f"An error occurred: {err}")
 
+    # Below files are for troubleshooting for now.
     with open("food_data.txt", "w") as f:
         f.write(food_data)
 
@@ -37,37 +57,31 @@ def get_food_items(food):  # PEP8: Function docstring missing
         f.write(str(food_fields))
 
     hits = food_fields["totalHits"]
-    # PEP8: Unnecessary parentheses around 'food_fields["totalHits"]' | Fixed
 
     if hits > 50:
         hits = 50
 
-    itemcount=0  # PEP8: Missing spaces around assignment operator (itemcount = 0)
-    print("Matching foods:")  # PEP8: Space inside parentheses is unnecessary
+    print("Matching foods:")
 
-    for itemcount in range(0, hits):
-        print(str(itemcount) + " " + food_fields["foods"][itemcount]["description"])
+    for item_count in range(0, hits):
+        print(f"{item_count} {food_fields["foods"][item_count]["description"]}")
         # PEP8: Prefer f-strings over concatenation for readability
 
-    item_choice = int(input("Which item would you like to see: "))  
-    # PEP8: Consider wrapping input in try-except to handle non-integer input
-
-    print(str(item_choice) + " " + food_fields["foods"][item_choice]["description"])
-    # PEP8: Prefer f-strings over concatenation
-
-    print(f"Nutrients for:", food_fields["foods"][item_choice]["description"])
-    # PEP8: When using f-strings, avoid mixing with commas, use full f-string
+    item_choice = None
+    try:
+        item_choice = int(input("Which item would you like to see: "))
+    except ValueError:
+        print ("Please enter an integer for your choice.")
 
     selected_food = food_fields["foods"][item_choice]
-
     print(f"Nutrients for: {selected_food['description']}")
 
     for nutrient in selected_food["foodNutrients"]:
         print(f"{nutrient['nutrientName']}: {nutrient['value']} {nutrient['unitName']}")
-        # PEP8: Inline comment (#test) is irrelevant and should be removed
 
-def main():  # PEP8: Duplicate function definition (remove one)
+def main():
     food = input("What food are you looking for:  ")
+    get_food_items(food)
 
 if __name__ == "__main__":
     main()
