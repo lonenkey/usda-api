@@ -4,15 +4,19 @@ import sys
 from requests.structures import CaseInsensitiveDict
 from pathlib import Path
 
-""" We need to refine the search to return more useful information, more refined.
-    Also needed, add error handling, return a health score by comparing the protein, carbs, calories
-    and other nutrients to rate each food on how good it is for you.
-    Also, generate a document with several different foods chosen
-    Create a database of recently saved foods."""
+""" 
+We need to refine the search to return more useful information, more refined.
+Also needed, add error handling, return a health score by comparing the protein, carbs, calories
+and other nutrients to rate each food on how good it is for you.
+Also, generate a document with several different foods chosen
+Create a database of recently saved foods.
+"""
 
 def get_food_items(food):
-    """Credentials.url file is required with API url and key
-    This module will take the food item and search for it in the USDA database"""
+    """
+    Credentials.url file is required with API url and key
+    This module will take the food item and search for it in the USDA database
+    """
 
     credentials_file = Path("credentials.py")
 
@@ -78,7 +82,10 @@ def get_food_items(food):
     for nutrient in selected_food["foodNutrients"]:
         print(f"{nutrient['nutrientName']}: {nutrient['value']} {nutrient['unitName']}")
 
-def main():
+def main()
+    """
+    Main function will call the rest of the application.
+    """
     food = input("What food are you looking for:  ")
     get_food_items(food)
 
