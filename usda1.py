@@ -64,8 +64,7 @@ def get_food_items(food):
     print("Matching foods:")
 
     for item_count in range(0, hits):
-        print(f"{item_count} {food_fields["foods"][item_count]["description"]}")
-        # PEP8: Prefer f-strings over concatenation for readability
+        print(f"{item_count} {food_fields['foods'][item_count]['description']}")
 
     item_choice = None
     try:
