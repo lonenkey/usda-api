@@ -82,7 +82,7 @@ def get_food_items(food):
     for nutrient in selected_food["foodNutrients"]:
         print(f"{nutrient['nutrientName']}: {nutrient['value']} {nutrient['unitName']}")
 
-def main()
+def main():
     """
     Main function will call the rest of the application.
     """
