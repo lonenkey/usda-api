@@ -12,6 +12,24 @@ Also, generate a document with several different foods chosen
 Create a database of recently saved foods.
 """
 
+def calculate_health_score(nutrients):
+    """
+    Calculate a health score based on nutrient values.
+    """
+    calories = nutrients.get("Energy", 0)
+    protein = nutrients.get("Protein", 0)
+    fat = nutrients.get("Total lipid (fat)", 0)
+    sugar = nutrients.get("Sugars, total including NLEA", 0)
+    fiber = nutrients.get("Fiber, total dietary", 0)
+    sodium = nutrients.get("Sodium, Na", 0)
+    
+    if calories == 0:
+        return 0
+    
+    score = (protein * 2 + fiber * 1.5) - (fat + sugar * 2 + sodium * 0.5)
+    score = max(0, min(100, score))  # Ensure the score is between 0-100
+    return round(score, 2)
+
 def get_food_items(food):
     """
     Credentials.url file is required with API url and key
@@ -79,8 +97,13 @@ def get_food_items(food):
     selected_food = food_fields["foods"][item_choice]
     print(f"Nutrients for: {selected_food['description']}")
 
+    nutrients = {}
     for nutrient in selected_food["foodNutrients"]:
+        nutrients[nutrient["nutrientName"]] = nutrient["value"]
         print(f"{nutrient['nutrientName']}: {nutrient['value']} {nutrient['unitName']}")
+    
+    health_score = calculate_health_score(nutrients)
+    print(f"Health Score: {health_score}/100")
 
 def main():
     """
