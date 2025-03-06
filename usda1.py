@@ -22,11 +22,14 @@ def calculate_health_score(nutrients):
     sugar = nutrients.get("Sugars, total including NLEA", 0)
     fiber = nutrients.get("Fiber, total dietary", 0)
     sodium = nutrients.get("Sodium, Na", 0)
-    
+
     if calories == 0:
         return 0
-    
-    score = (protein * 2 + fiber * 1.5) - (fat + sugar * 2 + sodium * 0.5)
+
+    score = (protein * 4 + fiber * 3) - (fat + sugar * 2 + (sodium / 100) * 0.5)
+    if protein > (calories / 10):
+        score = score + 40
+
     score = max(0, min(100, score))  # Ensure the score is between 0-100
     return round(score, 2)
 
@@ -96,7 +99,6 @@ def get_food_items(food):
 
     selected_food = food_fields["foods"][item_choice]
     print(f"Nutrients for: {selected_food['description']}")
-
     nutrients = {}
     for nutrient in selected_food["foodNutrients"]:
         nutrients[nutrient["nutrientName"]] = nutrient["value"]
