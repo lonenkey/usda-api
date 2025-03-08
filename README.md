@@ -48,7 +48,7 @@ A Python script to retrieve nutritional data for food items from the USDA FoodDa
 
 1. **Run the Script**:
    ```bash
-   python food_nutrition.py
+   python usda1.py
    ```
 
 2. **Search for a Food Item**:  
