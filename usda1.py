@@ -80,8 +80,8 @@ def get_food_items(food):
 
     hits = food_fields["totalHits"]
 
-    if hits > 50:
-        hits = 50
+    if hits > 5:
+        hits = 5
 
     print("Matching foods:")
 
