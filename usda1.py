@@ -172,8 +172,15 @@ def main():
     """
     Main function will call the rest of the application.
     """
-    food = input("What food are you looking for:  ")
-    get_food_items(food)
+    while (1):
+        food = input("\nWhat food are you looking for:  ")
+        get_food_items(food)
+
+        choice  = input("\nWant to check another food? (Y/N): ")
+
+        if choice.lower() == 'n':
+            break
 
 if __name__ == "__main__":
     main()
+    
