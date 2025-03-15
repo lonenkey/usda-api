@@ -1,0 +1,5 @@
+2025-03-15 13:00:58,665 - ERROR - Unexpected error in main loop: name 'USDAAPIError' is not defined
+2025-03-15 13:01:19,523 - ERROR - Unexpected error: module 'credentials' has no attribute 'url'
+2025-03-15 13:01:22,784 - ERROR - Unexpected error: module 'credentials' has no attribute 'url'
+2025-03-15 13:01:27,474 - ERROR - Unexpected error: module 'credentials' has no attribute 'url'
+2025-03-15 13:05:48,245 - ERROR - API error: API request failed: Invalid URL 'YOUR_USDA_API_ENDPOINT': No scheme supplied. Perhaps you meant https://YOUR_USDA_API_ENDPOINT?
