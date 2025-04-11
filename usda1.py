@@ -121,6 +121,16 @@ def get_food_items(food: str) -> int:
         # Make API request with timeout
         try:
             response = requests.post(url, headers=headers, json=data, timeout=10)
+
+            if response.status_code in (401, 403):
+                print("Error:  Invalid or unauthorized API key.  Please check your credentials file.")
+                try:
+                    error_details = response.json()
+                    print(f"API response details: {error_details}")
+                except ValueError:
+                    print(f"API response: {response.text}")
+                return None
+            
             response.raise_for_status()
             food_data = response.json()
         except requests.exceptions.Timeout:
