@@ -2,6 +2,7 @@ import requests
 import json
 import sys
 import logging
+import sqlite3
 from requests.structures import CaseInsensitiveDict
 from pathlib import Path
 from typing import Dict, Any
@@ -16,6 +17,32 @@ logging.basicConfig(
     filemode='a'
 )
 logger = logging.getLogger(__name__)
+
+def db_insert(food_info):
+
+    conn = sqlite3.connect('foods.db')
+    cursor = conn.cursor()
+
+    #create a table
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS Food (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    description TEXT,
+    brandOwner TEXT,
+    ingredients TEXT,
+    nutrientId INTEGER,
+    nutrientName TEXT,
+    value REAL
+    );
+    """)
+    
+    cursor.executemany(
+        "Insert INTO Food (id, description, brandOwner, ingredients, nutrientId, nutrientName, value) "
+        "VALUES (?, ?, ?, ?, ?, ?);", 
+        food_info)
+    
+    conn.commit()
+    conn.close()
 
 def calculate_health_score(nutrients: Dict[str, float]) -> int:
     """
