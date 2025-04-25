@@ -237,19 +237,27 @@ def main() -> None:
 
             if not food:
                 print("Please enter a food name")
-                continue
+                continueloq
 
             health_score = get_food_items(food)
             
             if health_score > 0:
-                print("\nWant to save this food or check another (1=save, 2=check another, n=quit)?")
+                print("\nWant to save this food or check another (1=save, 2=check another, q=quit)?")
                 choice = input("Enter your choice: ").strip()
-                if choice == 'n':
+                if choice == 'q':
                     print("\nThank you for using the application!")
                     break
-                elif choice != '1':
+                elif choice == '1':
                     db_insert([food, health_score]) # Save food info to database)
-
+                elif choice == '2':
+                    continue
+                else:
+                    print("Invalid choice. Please enter 1, 2, or q.")
+            else:
+                print("No valid health score calculated. Please try again.")
+        except ValueError as ve:
+            logger.error(f"Value error: {str(ve)}")
+            print("Invalid input. Please enter a valid number.")    
             
         except KeyboardInterrupt:
             print("\nApplication terminated by user")
