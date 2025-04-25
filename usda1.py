@@ -2,6 +2,7 @@ import requests
 import json
 import sys
 import logging
+import sqlite3
 from requests.structures import CaseInsensitiveDict
 from pathlib import Path
 from typing import Dict, Any
@@ -16,6 +17,32 @@ logging.basicConfig(
     filemode='a'
 )
 logger = logging.getLogger(__name__)
+
+def db_insert(food_info, health_score):
+    conn = sqlite3.connect('foods.db')
+    cursor = conn.cursor()
+
+    #create a table
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS Food (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    description TEXT,
+    brandOwner TEXT,
+    ingredients TEXT,
+    nutrientId INTEGER,
+    nutrientName TEXT,
+    value REAL
+    health_score INTEGER
+    );
+    """)
+    
+    cursor.executemany(
+        "Insert INTO Food (id, description, brandOwner, ingredients, nutrientId, nutrientName, value, health_score)"
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?);", 
+        food_info)
+    
+    conn.commit()
+    conn.close()
 
 def calculate_health_score(nutrients: Dict[str, float]) -> int:
     """
@@ -215,12 +242,14 @@ def main() -> None:
             health_score = get_food_items(food)
             
             if health_score > 0:
-                choice = input("\nWant to check another food? (Y/N): ").strip().lower()
+                print("\nWant to save this food or check another (1=save, 2=check another, n=quit)?")
+                choice = input("Enter your choice: ").strip()
                 if choice == 'n':
                     print("\nThank you for using the application!")
                     break
-                elif choice != 'y':
-                    print("Invalid choice, continuing...")
+                elif choice != '1':
+                    db_insert([food, health_score]) # Save food info to database)
+
             
         except KeyboardInterrupt:
             print("\nApplication terminated by user")
